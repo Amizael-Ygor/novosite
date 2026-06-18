@@ -1,6 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Livro(models.Model):
+
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='livros'
+    )
 
     STATUS = (
         ('QUERO_LER', 'Quero Ler'),
@@ -27,11 +34,17 @@ class Livro(models.Model):
 
     def __str__(self):
         return self.titulo
-
-
+    
 class Favorito(models.Model):
-    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
-    adicionado_em = models.DateTimeField(auto_now_add=True)
+
+    livro = models.ForeignKey(
+        Livro,
+        on_delete=models.CASCADE
+    )
+
+    adicionado_em = models.DateTimeField(
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name_plural = "Favoritos"
