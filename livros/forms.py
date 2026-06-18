@@ -1,8 +1,13 @@
-from django import forms
-from .models import Livro
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-class LivroForm(forms.ModelForm):
+class CadastroForm(UserCreationForm):
 
     class Meta:
-        model = Livro
-        fields = '__all__'
+        model = User
+        fields = [
+            'username',
+            'email',
+            'password1',
+            'password2'
+        ]
