@@ -27,3 +27,14 @@ class Livro(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class Favorito(models.Model):
+    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
+    adicionado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Favoritos"
+
+    def __str__(self):
+        return f"Favorito: {self.livro.titulo}"
