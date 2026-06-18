@@ -38,6 +38,92 @@
         .sidebar a:hover{
             background:#343a40;
         }
+
+        .sidebar a.active {
+            background:#007bff;
+        }
+
+        .livro-card{
+            border:none;
+            border-radius:10px;
+            overflow:hidden;
+            transition:.3s;
+            height:100%;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .livro-card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        .livro-img{
+            background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height:150px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:36px;
+            font-weight:bold;
+        }
+
+        .livro-body{
+            padding:10px;
+        }
+
+        .livro-body h6{
+            font-weight:bold;
+            color:#212529;
+            margin-bottom:5px;
+            min-height:32px;
+            font-size:12px;
+        }
+
+        .livro-info{
+            font-size:11px;
+            color:#666;
+            margin:3px 0;
+            display:none;
+        }
+
+        .badge-status{
+            font-size:10px;
+            margin:3px 0;
+        }
+
+        .btn-group-livro{
+            gap:3px;
+            margin-top:8px;
+        }
+
+        .btn-group-livro .btn{
+            padding:4px 8px;
+            font-size:11px;
+        }
+
+        .livro-col{
+            flex: 0 0 calc(20% - 8px);
+            margin: 4px;
+        }
+
+        @media (max-width: 1400px) {
+            .livro-col{
+                flex: 0 0 calc(25% - 8px);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .livro-col{
+                flex: 0 0 calc(33.333% - 8px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .livro-col{
+                flex: 0 0 calc(50% - 8px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -63,14 +149,15 @@
 
         <div class="p-4">
 
-            <h1>Minha Biblioteca Pessoal</h1>
+            <h1>📚 Minha Biblioteca Pessoal</h1>
 
-            <div class="row mt-4">
+            <!-- Estatísticas -->
+            <div class="row mt-4 mb-5">
 
                 <div class="col-md-3">
                     <div class="card card-dashboard shadow">
                         <div class="card-body">
-                            <h2>0</h2>
+                            <h2>{{ total_livros }}</h2>
                             <p>Total de Livros</p>
                         </div>
                     </div>
@@ -79,7 +166,7 @@
                 <div class="col-md-3">
                     <div class="card card-dashboard shadow">
                         <div class="card-body">
-                            <h2>0</h2>
+                            <h2>{{ livros_lendo }}</h2>
                             <p>Lendo</p>
                         </div>
                     </div>
@@ -88,7 +175,7 @@
                 <div class="col-md-3">
                     <div class="card card-dashboard shadow">
                         <div class="card-body">
-                            <h2>0</h2>
+                            <h2>{{ livros_concluidos }}</h2>
                             <p>Concluídos</p>
                         </div>
                     </div>
@@ -97,7 +184,7 @@
                 <div class="col-md-3">
                     <div class="card card-dashboard shadow">
                         <div class="card-body">
-                            <h2>0</h2>
+                            <h2>{{ livros_favoritos }}</h2>
                             <p>Favoritos</p>
                         </div>
                     </div>
@@ -105,18 +192,38 @@
 
             </div>
 
-            <div class="card mt-4 shadow">
-                <div class="card-body">
+            <!-- Livros Disponíveis -->
+            <h3 class="mb-4">📖 Livros Disponíveis</h3>
 
-                    <h4>Bem-vindo!</h4>
+            {% if livros %}
+            <div style="display: flex; flex-wrap: wrap; margin: -4px;">
+                {% for livro in livros %}
+                <div class="livro-col">
+                    <div class="livro-card">
+                        <div class="livro-img">
+                            📚
+                        </div>
+                        <div class="livro-body">
+                            <h6 class="livro-title">{{ livro.titulo }}</h6>
+                            
+                            <div>
+                                <span class="badge badge-status bg-info" style="font-size: 10px;">{{ livro.get_status_display }}</span>
+                            </div>
 
-                    <p>
-                        Gerencie seus livros, acompanhe leituras,
-                        registre avaliações e acompanhe suas metas.
-                    </p>
-
+                            <div class="btn-group-livro d-grid gap-2">
+                                <button class="btn btn-sm btn-primary" onclick="adicionarLivro({{ livro.id }})">➕</button>
+                                <button class="btn btn-sm btn-warning" onclick="favoritarLivro({{ livro.id }})">⭐</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                <strong>Nenhum livro disponível no momento!</strong> Por favor, volte mais tarde.
+            </div>
+            {% endif %}
 
         </div>
 
@@ -125,6 +232,19 @@
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function adicionarLivro(livroId) {
+        alert('Livro ID: ' + livroId + ' adicionado à sua biblioteca!');
+        // TODO: Implementar adição do livro via AJAX
+    }
+
+    function favoritarLivro(livroId) {
+        alert('Livro ID: ' + livroId + ' marcado como favorito!');
+        // TODO: Implementar favorito via AJAX
+    }
+</script>
 
 </body>
 </html>

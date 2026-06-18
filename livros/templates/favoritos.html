@@ -43,16 +43,17 @@
             background:#007bff;
         }
 
-        .book-item{
-            border:1px solid #ddd;
-            border-radius:8px;
+        .favorite-card{
+            border:2px solid #ffc107;
+            border-radius:10px;
             padding:15px;
             margin-bottom:15px;
             background:white;
+            transition:.3s;
         }
 
-        .book-item:hover{
-            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        .favorite-card:hover{
+            box-shadow:0 4px 12px rgba(255, 193, 7, 0.3);
         }
     </style>
 </head>
@@ -79,25 +80,42 @@
 
         <div class="p-4">
 
-            <h1>Livros Favoritos</h1>
+            <h1>⭐ Livros Favoritos</h1>
 
-            <div class="mt-4">
-                {% if favoritos %}
-                    {% for livro in favoritos %}
-                    <div class="book-item">
-                        <h5>⭐ {{ livro.titulo }}</h5>
-                        <p><strong>Autor:</strong> {{ livro.autor }}</p>
-                        <p><strong>Avaliação:</strong> ⭐ {{ livro.avaliacao }}</p>
-                        <button class="btn btn-sm btn-primary">Ver Detalhes</button>
-                        <button class="btn btn-sm btn-secondary">Remover dos Favoritos</button>
+            {% if favoritos %}
+                <p class="text-muted">Total: <strong>{{ favoritos|length }}</strong> livro(s) favoritado(s)</p>
+                
+                {% for livro in favoritos %}
+                <div class="favorite-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-2">⭐ {{ livro.titulo }}</h5>
+                            <p class="mb-2"><strong>Autor:</strong> {{ livro.autor }}</p>
+                            <p class="mb-2"><strong>Gênero:</strong> {{ livro.genero }} | <strong>Ano:</strong> {{ livro.ano }}</p>
+                            <p>
+                                {% if livro.status == 'LENDO' %}
+                                    <span class="badge bg-info">{{ livro.get_status_display }}</span>
+                                {% elif livro.status == 'CONCLUIDO' %}
+                                    <span class="badge bg-success">{{ livro.get_status_display }}</span>
+                                {% elif livro.status == 'QUERO_LER' %}
+                                    <span class="badge bg-primary">{{ livro.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ livro.get_status_display }}</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-info">👁️ Ver Detalhes</button>
+                            <button class="btn btn-sm btn-outline-danger">❌ Remover</button>
+                        </div>
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="alert alert-info" role="alert">
-                        <strong>Nenhum livro marcado como favorito!</strong> Marque seus livros favoritos para acessá-los rapidamente.
-                    </div>
-                {% endif %}
-            </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <strong>⭐ Nenhum livro marcado como favorito!</strong> Acesse o dashboard e marque seus livros favoritos para acessá-los rapidamente aqui.
+                </div>
+            {% endif %}
 
         </div>
 
@@ -106,6 +124,8 @@
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
